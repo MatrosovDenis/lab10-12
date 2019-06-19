@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "labs.h"
+#include "lab12.h"
 
 head* getCH(){
     head* h;
