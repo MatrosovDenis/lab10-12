@@ -2,54 +2,7 @@
 #include <stdlib.h>
 #include "labs.h"
 
-typedef struct CNode{
-    int id;
-    int data;
-    struct CNode *next;
-    struct CNode *prev;
-}CN;
-
-typedef struct head{
-    int count;
-    CN* first;
-    CN* last;
-}head;
-
-typedef struct LNode{
-    int id;
-    int data;
-    struct LNode *next;
-}LN;
-
-typedef struct lhead{
-    int count;
-    LN* first;
-    LN* last;
-}headL;
-
-headL* getHL(){
-    headL* h;
-    h = (headL*)malloc(sizeof(headL));
-    if(h!=NULL)
-    {
-        h->first = NULL;
-        h->last = NULL;
-        h->count = 0;
-    }
-}
-
-LN* copy(CN* c){
-    LN* l;
-    l = (LN*)malloc(sizeof(LN));
-    if(l!=NULL){
-        l->next = NULL;
-        l->id = 1;
-        l->data = c->data;
-    }
-    return l;
-}
-
-head* getH(){
+head* getCH(){
     head* h;
     h = (head*)malloc(sizeof(head));
     if(h!=NULL)
@@ -64,10 +17,10 @@ head* getH(){
             h->last = h->first;
         }
     }
-    return h;
+return h;
 }
 
-void GetNode(head* head){
+void GetCNode(head* head){
     CN* prev = head->last;
     CN* result;
     result = (CN*)malloc(sizeof(CN));
@@ -83,31 +36,60 @@ void GetNode(head* head){
     }
 }
 
-void copyCtoL(headL* l, head* c){
-    LN* nowl = l->first;
-    CN* nowc = c->first;
-    int ID = 1;
-    if(((c->count) % 2)==1){
-        for(int i = 0; i< c->count/2 -1 ; i++){
-            nowc = nowc->next;
-        }
-        l->first = copy(nowc);
-        l->count++;
-        for(int i = 1; i< c->count/2-1; i++){
 
-        }
-    }
-    else{
-
+void printN(head* h){
+    CN* tmp = h->first;
+    for(int i = 0; i < h->count; i++){
+    printf("%d: %d\n", tmp->id, tmp->data);
+    tmp = tmp->next;
     }
 }
 
-void printN(headL* h){
-    LN* tmp = h->first;
-    for(int i = 0; i < h->count; i++){
-        printf("%d: %d\n", tmp->id, tmp->data);
-        tmp = tmp->next;
+CN* Ccopy(CN* a){
+    CN* result;
+    result = (CN*)malloc(sizeof(CN));
+    result->data = a->data;
+    result->id = a->id;
+    result->prev = NULL;
+    result->next = NULL;
+}
+
+CN* takeN(head* h, int N){
+    CN* result;
+    CN* now = h->first;
+    for(int i = 1; i < N; i++){
+        now = now->next;
     }
+    result = Ccopy(now);
+    return result;
+}
+
+head* newN(head* h){
+    head* result;
+    result = (head*)malloc(sizeof(head));
+    result->first = takeN(h, (h->count)/2);
+    result->first->id = 1;
+    CN* now = result->first;
+    for(int i = (h->count)/2 - 1; i > 0; i--){
+        now->next = takeN(h, i);
+        now->next->id = now->id + 1;
+        now->next->prev = now;
+        now = now->next;
+    }
+    if(h->count%2 == 1){
+        now->next = takeN(h, h->count/2 + 1);
+        now->next->id = now->id + 1;
+        now->next->prev = now;
+        now = now->next;
+    }
+    for(int i = h->count; i > (h->count/2 + h->count%2); i--){
+        now->next = takeN(h, i);
+        now->next->id = now->id + 1;
+        now->next->prev = now;
+        now = now->next;
+    }
+    result->count = h->count;
+    return result;
 }
 
 int lab12()
@@ -115,15 +97,15 @@ int lab12()
     int N, b;
     printf("Please enter number of nodes: ");
     scanf("%d", &N);
-    printf("Please enter nodes: ");
+    printf("Please enter nodes: \n");
     head* h;
-    head* l;
-    l = getHL();
-    h = getH();
+    head* newH;
+    h = getCH();
     for(int i = 0; i< N-1; i++){
-        GetNode(h);
+        GetCNode(h);
     }
-    copyCtoL(l, h);
-    printN(l);
+    newH = newN(h);
+    printf("Result is: \n");
+    printN(newH);
     return 0;
 }

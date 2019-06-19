@@ -1,28 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "labs.h"
-
-typedef struct LNode{
-    int id;
-    int data;
-    struct LNode *next;
-}LN;
-
-typedef struct head{
-    int count;
-    LN* first;
-    LN* last;
-}head;
+#include "lab10.h"
 
 
-
-head* getH(){
-    head* h;
-    h = (head*)malloc(sizeof(head));
+LOhead* getH(){
+    LOhead* h;
+    h = (LOhead*)malloc(sizeof(LOhead));
     if(h!=NULL)
     {
         h->count = 1;
-        h->first = (LN*)malloc(sizeof(LN));
+        h->first = (LON*)malloc(sizeof(LON));
         scanf("%d", &h->first->data);
         h->first->id = 1;
         h->first->next = NULL;
@@ -32,23 +19,23 @@ head* getH(){
     return h;
 }
 
-void GetNode(head* head){
-    LN* prev = head->last;
-    LN* result;
-    result = (LN*)malloc(sizeof(LN));
+void GetNode(LOhead* LOhead){
+    LON* prev = LOhead->last;
+    LON* result;
+    result = (LON*)malloc(sizeof(LON));
     if(result!=NULL){
         result->next = NULL;
-        result->id = head->last->id+1;
+        result->id = LOhead->last->id+1;
         scanf("%d", &(result->data));
-        head->last->next = result;
-        head->last = head->last->next;
-        head->count++;
+        LOhead->last->next = result;
+        LOhead->last = LOhead->last->next;
+        LOhead->count++;
     }
 }
 
-LN* copy(LN* p){
-    LN* n;
-    n = (LN*)malloc(sizeof(LN));
+LON* copy(LON* p){
+    LON* n;
+    n = (LON*)malloc(sizeof(LON));
     if(n!=NULL){
         n->data = p->data;
         n->id = p->id;
@@ -56,11 +43,11 @@ LN* copy(LN* p){
     }
 }
 
-void copyTo(head* h, int ID, int TO){
-    LN* n = h->first;
-    LN* tmp;
-    LN* tmp2;
-    LN* newN;
+void copyTo(LOhead* h, int ID, int TO){
+    LON* n = h->first;
+    LON* tmp;
+    LON* tmp2;
+    LON* newN;
     for(int i = 0; i < ID-1; i++) n = n->next;
     if(TO == 0 || TO == 1){
         tmp = h->first;
@@ -93,8 +80,8 @@ void copyTo(head* h, int ID, int TO){
     }
 }
 
-void PrintNodes(head* h){
-    LN* now = h->first;
+void PrintNodes(LOhead* h){
+    LON* now = h->first;
     while(now!=NULL){
         printf("%d: %d\n", now->id, now->data);
         now = now->next;
@@ -107,9 +94,8 @@ int lab10()
     printf("Please enter number of nodes: ");
     scanf("%d", &N);
 
-    head* h;
+    LOhead* h;
     h = getH();
-    //LN* now = h->first;
     for(int i = 0; i < N-1; i++){
         GetNode(h);
     }

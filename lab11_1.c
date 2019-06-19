@@ -2,22 +2,9 @@
 #include <stdlib.h>
 #include "labs.h"
 
-typedef struct LNode{
-    int id;
-    int data;
-    struct LNode *next;
-    struct LNode *prev;
-}LN;
-
-typedef struct head{
-    int count;
-    LN* first;
-    LN* last;
-}head;
-
-head* getH(){
-    head* h;
-    h = (head*)malloc(sizeof(head));
+Lhead* getLH(){
+    Lhead* h;
+    h = (Lhead*)malloc(sizeof(Lhead));
     if(h!=NULL)
     {
         h->count = 1;
@@ -32,22 +19,22 @@ head* getH(){
     return h;
 }
 
-void GetNode(head* head){
-    LN* prev = head->last;
+void GetLNode(Lhead* Lhead){
+    LN* prev = Lhead->last;
     LN* result;
     result = (LN*)malloc(sizeof(LN));
     if(result!=NULL){
         result->next = NULL;
-        result->prev = head->last;
-        result->id = head->last->id+1;
+        result->prev = Lhead->last;
+        result->id = Lhead->last->id+1;
         scanf("%d", &(result->data));
-        head->last->next = result;
-        head->last = head->last->next;
-        head->count++;
+        Lhead->last->next = result;
+        Lhead->last = Lhead->last->next;
+        Lhead->count++;
     }
 }
 
-void printElem(head* h){
+void printElem(Lhead* h){
     LN* now = h->first;
     while(now!=NULL){
         printf("%d\t", now->data);
@@ -55,7 +42,7 @@ void printElem(head* h){
     }
 }
 
-void deleteOne(head* h, int nID){
+void deleteOne(Lhead* h, int nID){
     if((nID > h->count) || (nID < 2)){
         printf("Invalid ID!!!\n");
     }
@@ -80,11 +67,11 @@ int lab11(){
     int N = 0, ID;
     printf("Enter number of element in sequence: ");
     scanf("%d", &N);
-    head* h;
+    Lhead* h;
     printf("Enter sequence: ");
-    h = getH();
+    h = getLH();
     for(int i = 0; i< N-1; i++){
-        GetNode(h);
+        GetLNode(h);
     }
     printf("Enter ID: ");
     scanf("%d", &ID);
